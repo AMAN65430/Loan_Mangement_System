@@ -1,5 +1,6 @@
 
 import re
+import os
 from functools import wraps
 from flask import (
     Flask,
@@ -37,7 +38,7 @@ def login_required(view_func):
 # VALIDATION HELPERS
 # ==================================================================
 
-EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+EMAIL_REGEX = re.compile(r"^[^\@\s]+@[^\@\s]+\.[^\@\s]+$")
 MOBILE_REGEX = re.compile(r"^[6-9]\d{9}$")  # 10-digit mobile number
 
 
@@ -334,4 +335,7 @@ if __name__ == "__main__":
         print(f"[WARNING] Could not seed default admin. Is MySQL running "
               f"and schema.sql imported? Error: {e}")
 
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    # Use PORT environment variable if set, default to 5000 for local dev
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
+
